@@ -1,0 +1,40 @@
+{
+  "name": "rag-nodejs-workshop",
+  "version": "1.0.0",
+  "description": "RAG NodeJS Summarization Workshop",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/useCaseRssSummarizer/index.js",
+    "setup": "node src/useCaseRssSummarizer/setupChroma.js",
+    "format": "prettier --list-different --write src/**/*.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "RAG",
+    "LLM",
+    "OpenAI",
+    "LangChain",
+    "Vector Database",
+    "Embeddings",
+    "Node Congress workshop"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@langchain/community": "^0.3.36",
+    "@langchain/openai": "^0.3.0",
+    "axios": "^1.6.2",
+    "chromadb": "^1.6.1",
+    "csv-parser": "^3.0.0",
+    "dotenv": "^16.4.7",
+    "langchain": "^0.3.0",
+    "openai": "^4.20.1",
+    "prettier": "^3.4.2",
+    "sqlite": "^5.0.1",
+    "sqlite3": "^5.1.6"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
