@@ -2,12 +2,16 @@
 // COMPLETE WORKFLOW EXAMPLE
 // =============================================================
 require("dotenv").config();
-const { OpenAIEmbeddings } = require("@langchain/openai");
+
 const { Chroma } = require("@langchain/community/vectorstores/chroma");
 const { fetchRSSFeed } = require("./01-documentRetrieval.js");
 const { splitByCharacter } = require("./02-documentSplitter.js");
-const { generateEmbeddings } = require("./03-documentStorageEmbeddings.js");
-const { advancedRAG } = require("./07-documentRetrieveAndSummarize.js");
+const {
+  generateEmbeddings,
+  getEmbedModel,
+} = require("./03-documentStorageEmbeddingsOllama.js");
+const { advancedRAG } = require("./07-documentRetrieveAndSummarizeOllama.js");
+const { ChromaClient } = require("chromadb");
 
 async function completeWorkshopDemo() {
   console.log("STARTING WORKSHOP DEMO");
@@ -29,13 +33,19 @@ async function completeWorkshopDemo() {
 
   // 3. Generate embeddings
   console.log("\n--- EMBEDDINGS GENERATION ---");
-  const embedModel = new OpenAIEmbeddings({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
+  const embedModel = getEmbedModel();
   const embeddings = await generateEmbeddings(allChunks);
   console.log(`Generated ${embeddings.length} embeddings`);
 
   // 4. Store in vector database
+  // Delete the existing collection first because when the model is switched, it's dimensionality differs
+  const chromaClient = new ChromaClient({
+    path: "http://localhost:8000", // Default ChromaDB server address
+  });
+  await chromaClient.deleteCollection({
+    name: "rag_node_workshop_articles",
+  });
+
   console.log("\n--- VECTOR STORAGE ---");
   const vectorStore = await Chroma.fromTexts(
     allChunks,

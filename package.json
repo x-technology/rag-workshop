@@ -23,6 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "@langchain/community": "^0.3.36",
+    "@langchain/ollama": "^0.2.0",
     "@langchain/openai": "^0.3.0",
     "axios": "^1.6.2",
     "chromadb": "^1.6.1",
