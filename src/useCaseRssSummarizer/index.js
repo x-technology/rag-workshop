@@ -10,8 +10,13 @@ const {
   generateEmbeddings,
   getEmbedModel,
 } = require("./03-documentStorageEmbeddingsOllama.js");
-const { advancedRAG } = require("./07-documentRetrieveAndSummarizeOllama.js");
+const { advancedRAG } = require("./07-documentRetrieveByQueryOllama.js");
 const { ChromaClient } = require("chromadb");
+const {
+  summarizeDocuments,
+  summarizeDocument,
+  getRelevantDocuments,
+} = require("./07-documentRetrieveByQueryOllama");
 
 async function completeWorkshopDemo() {
   console.log("STARTING WORKSHOP DEMO");
@@ -34,8 +39,8 @@ async function completeWorkshopDemo() {
   // 3. Generate embeddings
   console.log("\n--- EMBEDDINGS GENERATION ---");
   const embedModel = getEmbedModel();
-  const embeddings = await generateEmbeddings(allChunks);
-  console.log(`Generated ${embeddings.length} embeddings`);
+  // const embeddings = await generateEmbeddings(allChunks);
+  // console.log(`Generated ${embeddings.length} embeddings`);
 
   // 4. Store in vector database
   // Delete the existing collection first because when the model is switched, it's dimensionality differs
@@ -57,12 +62,30 @@ async function completeWorkshopDemo() {
   );
   console.log("Documents stored in vector database");
 
-  // 5. Retrieve and summarize
-  console.log("\n--- RETRIEVE & SUMMARIZE ---");
-  const query = "What are the main topics in these articles?";
-  const answer = await advancedRAG(vectorStore, query);
-  console.log(`Query: ${query}`);
-  console.log(`Answer: ${answer}`);
+  // 5. Retrieve and answer
+  console.log("\n--- RETRIEVE & ANSWER ---");
+  const question = async (query) => {
+    const answer = await advancedRAG(vectorStore, query);
+    console.log(`Query: ${query}`);
+    console.log(`Answer: ${answer}`);
+  };
+  await question("What are the best ChatGPT use cases?");
+  await question("What is the best JavaScript framework?");
+
+  // 6. Evaluate based on summary
+  const relevanceTotal = [];
+  for (const doc of documents) {
+    const summary = await summarizeDocument(doc);
+    console.log(summary);
+    const relevantDocs = await getRelevantDocuments(summary);
+    const relevance = relevantDocs.map((d) => d === doc);
+    relevanceTotal.push(relevance);
+    // await question(
+    //   `Here is a summary of some documents (none, one or more): "${summary}". Summary of what document is it?`,
+    // );
+  }
+
+  console.log(relevanceTotal);
 
   console.log("\nWORKSHOP DEMO COMPLETED");
 }

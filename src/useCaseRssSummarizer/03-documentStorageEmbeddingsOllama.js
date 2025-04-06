@@ -5,11 +5,15 @@
 // Embeddings Generation
 const { OllamaEmbeddings } = require("@langchain/ollama");
 
-async function generateEmbeddings(texts, model = "nomic-embed-text") {
-  const embeddings = new OllamaEmbeddings({
-    baseUrl: "http://localhost:11434", // Default Ollama local server
-    model: model,
+const getEmbedModel = () => {
+  return new OllamaEmbeddings({
+    baseUrl: "http://localhost:11434",
+    model: "nomic-embed-text", // A small embedding model in Ollama
   });
+};
+
+async function generateEmbeddings(texts) {
+  const embeddings = getEmbedModel();
 
   try {
     return await embeddings.embedDocuments(texts);
@@ -19,15 +23,8 @@ async function generateEmbeddings(texts, model = "nomic-embed-text") {
   }
 }
 
-const getEmbedModel = () => {
-  return new OllamaEmbeddings({
-    baseUrl: "http://localhost:11434",
-    model: "nomic-embed-text", // A small embedding model in Ollama
-  });
-};
-
 // Export functions for workshop modules
 module.exports = {
-  generateEmbeddings,
   getEmbedModel,
+  generateEmbeddings,
 };
