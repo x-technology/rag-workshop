@@ -17,6 +17,7 @@ const {
   summarizeDocument,
   getRelevantDocuments,
 } = require("./07-documentRetrieveByQueryOllama");
+const { evaluate } = require("./08-evaluationOllama");
 
 async function completeWorkshopDemo() {
   console.log("STARTING WORKSHOP DEMO");
@@ -73,19 +74,8 @@ async function completeWorkshopDemo() {
   await question("What is the best JavaScript framework?");
 
   // 6. Evaluate based on summary
-  const relevanceTotal = [];
-  for (const doc of documents) {
-    const summary = await summarizeDocument(doc);
-    console.log(summary);
-    const relevantDocs = await getRelevantDocuments(summary);
-    const relevance = relevantDocs.map((d) => d === doc);
-    relevanceTotal.push(relevance);
-    // await question(
-    //   `Here is a summary of some documents (none, one or more): "${summary}". Summary of what document is it?`,
-    // );
-  }
-
-  console.log(relevanceTotal);
+  console.log("\n--- EVALUATE THE STORE ---");
+  await evaluate(allChunks, vectorStore);
 
   console.log("\nWORKSHOP DEMO COMPLETED");
 }

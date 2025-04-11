@@ -1,0 +1,14 @@
+[
+  {
+    "summary":"RisingStack is a full-stack agency offering consulting, code reviews, trainings, and education on JavaScript, DevOps, Microservices, and Kubernetes."
+  },
+  {
+    "summary":"Node.js updated to v21.1.0, featuring new experimental features and optimizations, replacing LTS v20.9.0."
+  },
+  {
+    "summary":"Popular JavaScript frameworks vary in developer love and dislike, with some being favored for their ease of use and others for their complexity, while AI development tools differ significantly in features and usability."
+  },
+  {
+    "summary":"Kubernetes interview preparation requires familiarizing yourself with suitable tools and frameworks like RedwoodJS and BlitzJS for full-stack development."
+  }
+]

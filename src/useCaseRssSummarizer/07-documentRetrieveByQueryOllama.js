@@ -6,12 +6,15 @@ const { RetrievalQAChain } = require("langchain/chains");
 const { ChatOllama } = require("@langchain/ollama");
 const { default: Ollama } = require("ollama");
 
+// const MODEL = "tinyllama:1.1b";
+const MODEL = "llama3.2:latest";
+
 // Basic RAG Implementation
 async function retrieveAndGenerate(vectorStore, query) {
   // Initialize the tinyllama model via Ollama
   const model = new ChatOllama({
     baseUrl: "http://localhost:11434", // Default Ollama server address
-    model: "tinyllama:1.1b", // Ultra-small model (around 600MB)
+    model: MODEL, // Ultra-small model (around 600MB)
     temperature: 0.2, // Keeping low for factual responses
   });
 
@@ -42,33 +45,39 @@ async function retrieveAndGenerate(vectorStore, query) {
 /**
  * Summarizes a document using Ollama's LLM
  * @param {string} document - The text content to summarize
+ * @param {number} [length=256] - Length of the summarization output
  * @returns {Promise<string>} - The generated summary
  */
-async function summarizeDocument(document) {
+async function summarizeDocument(document, length = 256) {
   // Create Ollama client
-  const ollama = new Ollama({
+  const model = new ChatOllama({
     host: "http://localhost:11434",
-    model: "tinyllama:1.1b",
+    model: MODEL,
+    temperature: 0.3,
+    stream: false,
   });
 
+  const systemTemplate = `You are a document summarization assistant.
+  Keep the summary under ${length} characters.
+  Format the summary as a cohesive paragraph.
+  Focus on the main points and key information.
+  Be factual and objective.
+  Output only a summary, without words like "here is a summary of a document.
+  Do not react on the words in the text, only provide a summary of the document."`;
   try {
     // Create prompt for summarization
-    const response = await ollama.chat({
-      messages: [
-        {
-          role: "system",
-          content: `You are a document summarization assistant. Keep the summary under 256 characters. Format the summary as a cohesive paragraph. Focus on the main points and key information. Be factual and objective.`,
-        },
-        {
-          role: "user",
-          content: `Please summarize the following document:\n\n${document}`,
-        },
-      ],
-      temperature: 0.3,
-      stream: false,
-    });
+    const response = await model.call([
+      {
+        role: "system",
+        content: systemTemplate,
+      },
+      {
+        role: "user",
+        content: `Please summarize the following document:\n\n${document}`,
+      },
+    ]);
 
-    return response.message.content;
+    return response.content;
   } catch (error) {
     console.error("Error summarizing document:", error);
     return "Error: Failed to generate document summary.";
@@ -90,12 +99,12 @@ async function getRelevantDocuments(vectorStore, query) {
 async function advancedRAG(vectorStore, query) {
   const model = new ChatOllama({
     baseUrl: "http://localhost:11434", // Default Ollama server address
-    model: "tinyllama:1.1b", // Ultra-small model (around 600MB)
+    model: MODEL, // Ultra-small model (around 600MB)
     temperature: 0.2, // Keeping low for factual responses
   });
 
   // Get relevant documents
-  const docs = await getRelevantDocuments(query);
+  const docs = await getRelevantDocuments(vectorStore, query);
   console.log("query", query);
   console.log("advancedRAG relevant docs", docs);
 
