@@ -1,5 +1,5 @@
 // =============================================================
-// PART 5: RETRIEVE & SUMMARIZE (10 min) - @pavlik
+// PART 5: RETRIEVE & SUMMARIZE @pavlik
 // =============================================================
 
 const { RetrievalQAChain } = require("langchain/chains");

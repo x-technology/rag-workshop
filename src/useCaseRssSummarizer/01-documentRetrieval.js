@@ -1,5 +1,5 @@
 // =============================================================
-// PART 2: DOCUMENT RETRIEVAL (5 min) - @alex
+// PART 2: DOCUMENT RETRIEVAL @alex
 // =============================================================
 
 const fs = require("fs").promises;

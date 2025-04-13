@@ -1,12 +1,15 @@
 // =============================================================
-// PART 3: DOCUMENT SPLITTING (15 min) - @alex
+// PART 3: DOCUMENT SPLITTING @alex
 // =============================================================
 
-const { RecursiveCharacterTextSplitter } = require("langchain/text_splitter");
+const {
+  CharacterTextSplitter,
+  RecursiveCharacterTextSplitter,
+} = require("@langchain/textsplitters");
 
 // Basic Text Splitter
 async function splitByCharacter(text, chunkSize = 1000, overlap = 200) {
-  const splitter = new RecursiveCharacterTextSplitter({
+  const splitter = new CharacterTextSplitter({
     chunkSize,
     chunkOverlap: overlap,
   });
@@ -19,7 +22,6 @@ async function splitByTokens(text, chunkSize = 500, overlap = 50) {
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize,
     chunkOverlap: overlap,
-    lengthFunction: (text) => text.split(" ").length, // Simple token approximation
   });
 
   return await splitter.splitText(text);
