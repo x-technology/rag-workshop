@@ -1,5 +1,6 @@
 // Simple Chat Implementation
 const readline = require("readline");
+const { default: ollama } = require("ollama");
 
 async function simpleChat() {
   const rl = readline.createInterface({
@@ -7,14 +8,11 @@ async function simpleChat() {
     output: process.stdout,
   });
 
-  const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-
   const chatHistory = [
     {
       role: "system",
-      content: "You are a helpful assistant specializing in RAG systems.",
+      content:
+        "You are a helpful assistant specializing in retrieval-augmented generation systems.",
     },
   ];
 
@@ -30,13 +28,13 @@ async function simpleChat() {
       chatHistory.push({ role: "user", content: input });
 
       try {
-        const response = await openai.chat.completions.create({
-          model: "gpt-4",
+        const response = await ollama.chat({
+          model: "tinyllama:1.1b", // Using the tiny LLM model
           messages: chatHistory,
           temperature: 0.7,
         });
 
-        const aiResponse = response.choices[0].message.content;
+        const aiResponse = response.message.content;
         console.log(`AI: ${aiResponse}`);
 
         chatHistory.push({ role: "assistant", content: aiResponse });
@@ -51,7 +49,4 @@ async function simpleChat() {
   askQuestion();
 }
 
-// Export functions for workshop modules
-module.exports = {
-  simpleChat,
-};
+simpleChat();

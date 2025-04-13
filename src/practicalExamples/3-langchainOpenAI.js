@@ -24,7 +24,4 @@ async function langchainBasic() {
   console.log(result2.response);
 }
 
-// Export functions for workshop modules
-module.exports = {
-  langchainBasic,
-};
+langchain();

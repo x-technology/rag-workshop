@@ -27,7 +27,4 @@ async function firstLLMCall() {
   }
 }
 
-// Export functions for workshop modules
-module.exports = {
-  firstLLMCall,
-};
+firstLLMCall();
