@@ -13,7 +13,7 @@ const MODEL = "llama3.2:latest";
 async function retrieveAndGenerate(vectorStore, query) {
   // Initialize the tinyllama model via Ollama
   const model = new ChatOllama({
-    baseUrl: "http://localhost:11434", // Default Ollama server address
+    baseUrl: "http://127.0.0.1:11434", // Default Ollama server address
     model: MODEL, // Ultra-small model (around 600MB)
     temperature: 0.2, // Keeping low for factual responses
   });
@@ -51,7 +51,7 @@ async function retrieveAndGenerate(vectorStore, query) {
 async function summarizeDocument(document, length = 256) {
   // Create Ollama client
   const model = new ChatOllama({
-    host: "http://localhost:11434",
+    host: "http://127.0.0.1:11434",
     model: MODEL,
     temperature: 0.3,
     stream: false,
@@ -98,7 +98,7 @@ async function getRelevantDocuments(vectorStore, query) {
 // Advanced RAG with LangChain
 async function advancedRAG(vectorStore, query) {
   const model = new ChatOllama({
-    baseUrl: "http://localhost:11434", // Default Ollama server address
+    baseUrl: "http://127.0.0.1:11434", // Default Ollama server address
     model: MODEL, // Ultra-small model (around 600MB)
     temperature: 0.2, // Keeping low for factual responses
   });
@@ -135,4 +135,5 @@ module.exports = {
   summarizeDocument,
   getRelevantDocuments,
   advancedRAG,
+  MODEL,
 };

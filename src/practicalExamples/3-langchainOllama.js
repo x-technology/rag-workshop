@@ -6,7 +6,6 @@ const { BufferMemory } = require("langchain/memory");
 async function langchain() {
   // Initialize Ollama chat model
   const chat = new ChatOllama({
-    baseUrl: "http://localhost:11434", // Default Ollama server address
     model: "tinyllama:1.1b", // Using the smallest model as requested
     temperature: 0.7,
   });

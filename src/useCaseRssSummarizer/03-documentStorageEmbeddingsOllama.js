@@ -1,5 +1,6 @@
 // =============================================================
 // PART 4: DOCUMENT STORAGE @alex
+// $ pip install chromadb==0.6.3
 // =============================================================
 
 // Embeddings Generation
@@ -7,7 +8,7 @@ const { OllamaEmbeddings } = require("@langchain/ollama");
 
 const getEmbedModel = () => {
   return new OllamaEmbeddings({
-    baseUrl: "http://localhost:11434",
+    baseUrl: "http://127.0.0.1:11434",
     model: "nomic-embed-text", // A small embedding model in Ollama
   });
 };

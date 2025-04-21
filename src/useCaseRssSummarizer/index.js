@@ -12,6 +12,21 @@ const { ChromaClient } = require("chromadb");
 const { evaluate } = require("./08-evaluationOllama");
 const { setupChromaDB } = require("./04-documentStorageChroma");
 
+const fs = require("fs");
+const util = require("util");
+const { MODEL } = require("./07-documentRetrieveByQueryOllama");
+// Or 'w' to truncate the file every time the process starts.
+const logFile = fs.createWriteStream(
+  `splitByTokens_500_50_nomic-embed-text_${MODEL}.txt`,
+  { flags: "a" },
+);
+const logStdout = process.stdout;
+
+console.log = function () {
+  logFile.write(util.format.apply(null, arguments) + "\n");
+  logStdout.write(util.format.apply(null, arguments) + "\n");
+};
+
 async function completeWorkshopDemo() {
   console.log("STARTING WORKSHOP DEMO");
 
@@ -32,7 +47,7 @@ async function completeWorkshopDemo() {
 
   // 3. Generate embeddings
   console.log("\n--- EMBEDDINGS GENERATION ---");
-  const embedModel = getEmbedModel();
+
   // const embeddings = await generateEmbeddings(allChunks);
   // console.log(`Generated ${embeddings.length} embeddings`);
 
@@ -41,12 +56,22 @@ async function completeWorkshopDemo() {
   const chromaClient = new ChromaClient({
     path: "http://localhost:8000", // Default ChromaDB server address
   });
-  // clear existing models to be able to put records with a different model
-  await chromaClient.deleteCollection({
+
+  try {
+    // clear existing models to be able to put records with a different model
+    await chromaClient.deleteCollection({
+      name: "rag_node_workshop_articles",
+    });
+  } catch {}
+  await chromaClient.createCollection({
     name: "rag_node_workshop_articles",
+    metadata: {
+      description: "RSS feed articles for RAG workshop",
+    },
   });
 
   console.log("\n--- VECTOR STORAGE ---");
+  const embedModel = getEmbedModel();
   const vectorStore = await setupChromaDB(allChunks, embedModel);
   console.log("Documents stored in vector database");
 

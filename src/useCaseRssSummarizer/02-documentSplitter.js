@@ -18,7 +18,7 @@ async function splitByCharacter(text, chunkSize = 1000, overlap = 200) {
 }
 
 // Split by Token Count
-async function splitByTokens(text, chunkSize = 500, overlap = 50) {
+async function splitByTokens(text, chunkSize = 300, overlap = 0) {
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize,
     chunkOverlap: overlap,
