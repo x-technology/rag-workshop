@@ -6,8 +6,8 @@ const { RetrievalQAChain } = require("langchain/chains");
 const { ChatOllama } = require("@langchain/ollama");
 const { default: Ollama } = require("ollama");
 
-// const MODEL = "tinyllama:1.1b";
-const MODEL = "llama3.2:latest";
+const MODEL = "tinyllama:1.1b";
+// const MODEL = "llama3.2:latest";
 
 // Basic RAG Implementation
 async function retrieveAndGenerate(vectorStore, query) {
