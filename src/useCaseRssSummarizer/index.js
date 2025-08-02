@@ -3,11 +3,12 @@
 // =============================================================
 require("dotenv").config();
 
+const { Chroma } = require("@langchain/community/vectorstores/chroma");
 const { fetchRSSFeed } = require("./01-documentRetrieval.js");
 const { splitByTokens } = require("./02-documentSplitter.js");
 const { getEmbedModel } = require("./03-documentStorageEmbeddingsOllama.js");
 const { advancedRAG } = require("./07-documentRetrieveByQueryOllama.js");
-
+const { ChromaClient } = require("chromadb");
 const { evaluate } = require("./08-evaluationOllama");
 const { setupChromaDB } = require("./04-documentStorageChroma");
 
@@ -51,6 +52,24 @@ async function completeWorkshopDemo() {
   // console.log(`Generated ${embeddings.length} embeddings`);
 
   // 4. Store in vector database
+  // Delete the existing collection first because when the model is switched, it's dimensionality differs
+  const chromaClient = new ChromaClient({
+    path: "http://localhost:8000", // Default ChromaDB server address
+  });
+
+  try {
+    // clear existing models to be able to put records with a different model
+    await chromaClient.deleteCollection({
+      name: "rag_node_workshop_articles",
+    });
+  } catch {}
+  await chromaClient.createCollection({
+    name: "rag_node_workshop_articles",
+    metadata: {
+      description: "RSS feed articles for RAG workshop",
+    },
+  });
+
   console.log("\n--- VECTOR STORAGE ---");
   const embedModel = getEmbedModel();
   const vectorStore = await setupChromaDB(allChunks, embedModel);
