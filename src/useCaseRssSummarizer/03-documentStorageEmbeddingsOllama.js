@@ -4,6 +4,7 @@
 // =============================================================
 
 // Embeddings Generation
+// ollama pull nomic-embed-text
 const { OllamaEmbeddings } = require("@langchain/ollama");
 
 const getEmbedModel = () => {

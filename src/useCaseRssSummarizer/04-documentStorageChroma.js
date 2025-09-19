@@ -5,11 +5,11 @@
 // Vector Database Integration (Chroma)
 const { Chroma } = require("@langchain/community/vectorstores/chroma");
 
-async function setupChromaDB(texts, embeddings) {
+async function setupChromaDB(texts, embedModel) {
   const vectorStore = await Chroma.fromTexts(
     texts,
     { id: Array.from({ length: texts.length }, (_, i) => `chunk-${i}`) },
-    embeddings,
+    embedModel,
     {
       collectionName: "rag_node_workshop_articles",
     },
