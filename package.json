@@ -27,6 +27,7 @@
     "@langchain/ollama": "^0.2.0",
     "@langchain/openai": "^0.3.0",
     "@langchain/textsplitters": "^0.1.0",
+    "@modelcontextprotocol/sdk": "^1.18.2",
     "axios": "^1.6.2",
     "chromadb": "^1.6.1",
     "csv-parser": "^3.0.0",
@@ -35,7 +36,8 @@
     "openai": "^4.20.1",
     "prettier": "^3.4.2",
     "sqlite": "^5.0.1",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "zod": "^3.25.76"
   },
   "engines": {
     "node": ">=18.0.0"
