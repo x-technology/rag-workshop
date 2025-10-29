@@ -1,4 +1,4 @@
-const { documentSplittingDemo } = require("./02-documentSplitter");
+const { documentSplittingDemo } = require("../02-documentSplitter.js");
 
 documentSplittingDemo(`One of the most important things I didn't understand about the world when I was a child is the degree to which the returns for performance are superlinear.
 
